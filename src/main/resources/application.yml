@@ -1,0 +1,35 @@
+server:
+  port: 8080
+
+notification:
+  apiKey: ""
+  apiId: ""
+
+spring:
+  dataSource:
+    driverClassName: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/ticket_master_dev
+    username: admin
+    password: admin
+  jpa:
+    hibernate:
+      ddl-auto: none #Automatic synchronization of the database schema
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+  #For file upload size
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+
+aws:
+  s3:
+    bucketName: ""
+    region: ""
+    accessKey: ""
+    secretAccessKey: ""
+    qr-code-image-folder: "qrCodeImgUrl"
+
+apiKeys:
+  brevo: ""
+  stripe: ""
