@@ -151,16 +151,10 @@ public class TicketServiceImpl implements TicketService {
     @Transactional(readOnly = true)
     public TicketWithSeatsResponse verifyTicketValidity(VerifyTicketValidityRequest verifyTicketValidityRequest) {
         TicketEntity ticket = ticketServiceUtil.getTicketEntityById(verifyTicketValidityRequest.getTicketId());
-        if (!ticket.getEventGroupDetailId().equals(verifyTicketValidityRequest.getEventGroupDetailId())) {
-            log.error("Ticket with id {} is not valid for the event", verifyTicketValidityRequest.getTicketId());
-            throw new BaseException(TicketError.TICKET_NOT_VALID_FOR_EVENT.getCode(),
-                    TicketError.TICKET_NOT_VALID_FOR_EVENT.getBusinessCode(),
-                    TicketError.TICKET_NOT_VALID_FOR_EVENT.getDescription());
-        }
         if (ticket.getStatus() != TicketStatus.ACTIVE) {
             log.error("Ticket with id {} is not valid for the event - Not active ticket", verifyTicketValidityRequest.getTicketId());
             throw new BaseException(TicketError.TICKET_NOT_ACTIVE.getCode(),
-                    TicketError.TICKET_NOT_ACTIVE.getBusinessCode(),
+                    ticket.getStatus().toString(), // Return the status of the ticket
                     TicketError.TICKET_NOT_ACTIVE.getDescription());
         }
         return mapper.map(ticket, TicketWithSeatsResponse.class);
@@ -220,10 +214,5 @@ public class TicketServiceImpl implements TicketService {
             log.error("Error cancelling the events for given event group details: {}", e.getMessage());
             throw CommonUtils.commonExceptionHandler(e);
         }
-    }
-
-    @Override
-    public TicketEntity getTicketEntityById(Integer ticketId) {
-        return ticketServiceUtil.getTicketEntityById(ticketId);
     }
 }

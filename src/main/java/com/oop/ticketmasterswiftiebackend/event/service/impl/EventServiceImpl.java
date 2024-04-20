@@ -61,6 +61,8 @@ public class EventServiceImpl implements EventService {
 
         EventGroupEntity newEvent = mapper.map(request, EventGroupEntity.class);
         newEvent.setStatus(EventStatus.UPCOMING);
+        newEvent.setBannerImgUrl("PENDING.jpg");
+        newEvent.setPosterImgUrl("PENDING.jpg");
         try {
             CreateUpdateEventGroupResponse eventResponse = mapper.map(eventGroupRepository.save(newEvent), CreateUpdateEventGroupResponse.class);
             // Create event group pricing
@@ -112,8 +114,10 @@ public class EventServiceImpl implements EventService {
         try {
             // Delete the existing event group details and create new ones
             eventGroupDetailRepository.deleteByEventGroupId(request.getEventGroupId());
+            eventGroupPricingRepository.deleteByEventGroupId(request.getEventGroupId());
             // Update the event group details
             CreateUpdateEventGroupResponse eventResponse = mapper.map(eventGroupRepository.save(eventGroupEntity), CreateUpdateEventGroupResponse.class);
+            createEventGroupPricing(eventResponse.getEventGroupId(), request.getCategoryPrices());
             // For each event group detail, create a new event group detail entity and save it
             List<BaseEventGroupDetailsResponse> eventGroupDetails = eventGroupDetailRepository.saveAll(
                     request.getTimings().stream().map(timing -> EventGroupDetailEntity.builder()
@@ -129,7 +133,7 @@ public class EventServiceImpl implements EventService {
             eventResponse.setEventGroupDetails(eventGroupDetails);
             return eventResponse;
         } catch (Exception e) {
-            log.error("Error occurred while creating event: {}", e.getMessage());
+            log.error("Error occurred while updating event: {}", e.getMessage());
             throw CommonUtils.commonExceptionHandler(e);
         }
     }

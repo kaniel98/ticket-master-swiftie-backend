@@ -1,6 +1,5 @@
 package com.oop.ticketmasterswiftiebackend.ticket.service;
 
-import com.oop.ticketmasterswiftiebackend.ticket.models.entities.TicketEntity;
 import com.oop.ticketmasterswiftiebackend.ticket.models.request.BookingTicketRequest;
 import com.oop.ticketmasterswiftiebackend.ticket.models.request.UpdateTicketRequest;
 import com.oop.ticketmasterswiftiebackend.ticket.models.response.BaseTicketResponse;
@@ -32,6 +31,4 @@ public interface TicketService {
     List<FullTicketSeatResponse> getAllValidTicketsSoldForEventGroupDetail(Integer eventGroupDetailId);
 
     List<Integer> listOfTicketIdForEventGroupDetails(List<Integer> eventGroupDetailsId);
-
-    TicketEntity getTicketEntityById(Integer ticketId);
 }

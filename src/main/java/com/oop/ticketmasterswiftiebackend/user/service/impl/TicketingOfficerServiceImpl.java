@@ -13,6 +13,7 @@ import com.oop.ticketmasterswiftiebackend.user.constants.AccountStatus;
 import com.oop.ticketmasterswiftiebackend.user.constants.RoleName;
 import com.oop.ticketmasterswiftiebackend.user.constants.UserError;
 import com.oop.ticketmasterswiftiebackend.user.models.request.CancelTicketRequest;
+import com.oop.ticketmasterswiftiebackend.user.models.request.CreateUserRequest;
 import com.oop.ticketmasterswiftiebackend.user.models.request.RedeemTicketRequest;
 import com.oop.ticketmasterswiftiebackend.user.models.request.VerifyTicketValidityRequest;
 import com.oop.ticketmasterswiftiebackend.user.models.response.UserResponse;
@@ -29,6 +30,7 @@ public class TicketingOfficerServiceImpl implements TicketingOfficerService {
     private final UserService userService;
     private final TicketService ticketService;
     private final int TICKETING_OFFICER_ROLE_ID = 3;
+    private final int USER_ROLE_ID = 1;
     private final String SUBSTITUTION_EMAIL = "NO_ACCOUNT";
 
     @Override
@@ -51,9 +53,11 @@ public class TicketingOfficerServiceImpl implements TicketingOfficerService {
         try {
             customerAccount = userService.getUserByEmail(ticketingOfficerBookingTicketRequest.getCustomerEmail());
         } catch (BaseException e) {
-            customerAccount = userService.getUserByEmail(SUBSTITUTION_EMAIL);
+            customerAccount = userService.createUser(CreateUserRequest.builder()
+                    .email(ticketingOfficerBookingTicketRequest.getCustomerEmail())
+                    .roleId(1)
+                    .build());
         }
-        // TODO - Get payment flow from the payment service
         BookingTicketRequest bookingTicketRequest = BookingTicketRequest.builder()
                 .customerId(customerAccount.getUserId())
                 .eventGroupDetailId(ticketingOfficerBookingTicketRequest.getEventGroupDetailId())

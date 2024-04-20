@@ -127,7 +127,7 @@ public class NotificationServiceImpl implements NotificationService {
             log.error("Error occurred while sending email notification: {}", e.getMessage());
             throw new BaseException(NotificationError.EMAIL_SEND_ERROR.getCode(), NotificationError.EMAIL_SEND_ERROR.getBusinessCode(), NotificationError.EMAIL_SEND_ERROR.getDescription());
         } catch (Exception e) {
-            log.error("Error occurred while sending email notification: {}", e.getMessage());
+            log.error("Generic error occurred while sending email notification: {}", e.getMessage());
             throw CommonUtils.commonExceptionHandler(e);
         }
     }

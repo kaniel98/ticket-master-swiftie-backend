@@ -10,6 +10,5 @@ import lombok.NoArgsConstructor;
 @Data
 @Builder
 public class VerifyTicketValidityRequest {
-    private Integer eventGroupDetailId;
     private Integer ticketId;
 }

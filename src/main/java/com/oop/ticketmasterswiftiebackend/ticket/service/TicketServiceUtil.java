@@ -36,7 +36,7 @@ public class TicketServiceUtil {
     @Transactional
     @Async
     public void generateQRCodeAndSaveToTicket(TicketWithSeatsResponse ticket, Boolean sendEmail) {
-        String qrCodeText = "{\n    \"ticketId\": " + ticket.getCustomerId() + ",\n    \"customerId\":  " + ticket.getTicketId() + "\n}";
+        String qrCodeText = String.valueOf(ticket.getTicketId());
         ByteArrayResource qrCode = qrCodeGeneratorService.generateQRCodeImage(qrCodeText, 250, 250);
         String qrCodeImageUrl = mediaService.uploadQrCodeImage(qrCodeImageFolder, qrCode, MediaType.IMAGE_PNG);
         log.info("QR code image uploaded to: {}", qrCodeImageUrl);
